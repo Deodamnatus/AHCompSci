@@ -1,4 +1,4 @@
-# use to test stuff
+float_test=round(3.000, 1)
+string_tes="asdfasdf"
 
-for x in range(5,101, 2):
-    print(x)
+print (float_test)
