@@ -1,4 +1,13 @@
-float_test=round(3.000, 1)
-string_tes="asdfasdf"
+import math
 
-print (float_test)
+radius = float(input("Radius:"))
+
+
+def sphereArea(radius):
+	return math.pi*4*(radius**2)
+
+
+def sphereVolume(radius):
+	return (4*math.pi*(radius**3))/3
+
+print("Surface Area: ", sphereArea(radius), "\nVolume: ", sphereVolume(radius))
