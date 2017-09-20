@@ -3,7 +3,6 @@
 score = float(input("Score: "))
 
 def grade(score):
-    LetterGrade = ""
     if score >= 90:
         LetterGrade = "A"
     elif score >= 80:
