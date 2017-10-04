@@ -1,6 +1,5 @@
 """The Game of Hog."""
 
-import dice
 
 
 GOAL_SCORE = 100 # The goal of Hog is to score 100 points.
@@ -11,7 +10,7 @@ GOAL_SCORE = 100 # The goal of Hog is to score 100 points.
 
 # Taking turns
 
-def roll_dice(num_rolls, dice=six_sided):
+def roll_dice(num_rolls, dice=6):
     """Roll DICE for NUM_ROLLS times.  Return either the sum of the outcomes,
     or 1 if a 1 is rolled (Pig out). This calls DICE exactly NUM_ROLLS times.
 
@@ -23,10 +22,18 @@ def roll_dice(num_rolls, dice=six_sided):
     assert num_rolls > 0, 'Must roll at least once.'
     "*** YOUR CODE HERE ***"
     assert type(dice) == int and dice >= 1, 'Illegal value for sides'
-    return randint(1, sides)
+    total = 0
+    for i in range(0,num_rolls):
+        roll = randint(1, sides)
+        #check for rolling a 1
+        if roll == 1:
+            total = 1
+            break
+        total += roll
+    return total
 
 
-def take_turn(num_rolls, opponent_score, dice=six_sided):
+def take_turn(num_rolls, opponent_score, dice=6):
     """Simulate a turn rolling NUM_ROLLS dice, which may be 0 (Free bacon).
 
     num_rolls:       The number of dice rolls that will be made.
@@ -38,6 +45,13 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     assert opponent_score < 100, 'The game should be over.'
     "*** YOUR CODE HERE ***"
+
+    # check for free bacon
+    if num_rolls == 0:
+        # return largest digit in opponent_string
+        return max( int(i) for i in str(opponent_score))
+    else:
+        return roll_dice(num_rolls, dice=dice)
 
 # Playing a game
 
