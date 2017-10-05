@@ -108,8 +108,9 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
         #num_rolls has been defined
 
         score += take_turn(num_rolls, opponent_score, select_dice(score, opponent_score))
-        who = other(who)
-        score,opponent_score = opponent_score,score
+        if score < goal and opponent_score < goal:
+            who = other(who)
+            score,opponent_score = opponent_score,score
 
 
     return score, opponent_score  # You may wish to change this line.
@@ -161,8 +162,14 @@ def make_averaged(fn, num_samples=1000):
     Thus, the average value is 6.0.
     """
     "*** YOUR CODE HERE ***"
+    total = 0
+    for i in range(0,num_samples):
+        total += fn()   #what args to put here
 
-def max_scoring_num_rolls(dice=six_sided):
+    return total/num_samples
+
+
+def max_scoring_num_rolls(dice=6):
     """Return the number of dice (1 to 10) that gives the highest average turn
     score by calling roll_dice with the provided DICE.  Print all averages as in
     the doctest below.  Assume that dice always returns positive outcomes.
@@ -182,9 +189,13 @@ def max_scoring_num_rolls(dice=six_sided):
     10
     """
     "*** YOUR CODE HERE ***"
+    #could implement actual averagine by doing multiple runs for every run instead of only calling roll_dice once
+    for i in range (1,11):
+        print(i, " dice scores ", roll_dice(i,dice), "on average")
 
 def winner(strategy0, strategy1):
     """Return 0 if strategy0 wins against strategy1, and 1 otherwise."""
+    #could implement actual average by doing multiple runs for every run instead of only calling play once
     score0, score1 = play(strategy0, strategy1)
     if score0 > score1:
         return 0
@@ -233,7 +244,11 @@ def bacon_strategy(score, opponent_score):
     0
     """
     "*** YOUR CODE HERE ***"
-    return 5 # Replace this statement
+    # Doesn't use score at all????
+    if max( int(i) for i in str(opponent_score)) + 1 >= BACON_MARGIN:
+        return 0
+    else:
+        return BASELINE_NUM_ROLLS
 
 def swap_strategy(score, opponent_score):
     """This strategy rolls 0 dice when it would result in a beneficial swap and
@@ -312,7 +327,7 @@ def play_interactive():
     score0, score1 = play(strategy0, strategy1)
     print('Final scores:', score0, 'to', score1)
 
-@main
+#@main
 def run(*args):
     """Read in the command-line argument and calls corresponding functions.
 
