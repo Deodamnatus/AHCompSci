@@ -192,7 +192,11 @@ def max_scoring_num_rolls(dice=6):
     "*** YOUR CODE HERE ***"
     #could implement actual averagine by doing multiple runs for every run instead of only calling roll_dice once
     for i in range (1,11):
-        print(i, " dice scores ", roll_dice(i,dice), "on average")
+        average_score=0
+        for x in range(0,1000):
+            average_score += roll_dice(i,dice)
+
+        print(i, " dice scores ", average_score/1000, "on average")
 
 def winner(strategy0, strategy1):
     """Return 0 if strategy0 wins against strategy1, and 1 otherwise."""
