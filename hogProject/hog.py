@@ -108,12 +108,13 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
         #num_rolls has been defined
 
         score += take_turn(num_rolls, opponent_score, select_dice(score, opponent_score))
-        if score < goal and opponent_score < goal:
-            who = other(who)
-            score,opponent_score = opponent_score,score
+        who = other(who)
+        score,opponent_score = opponent_score,score
 
-
-    return score, opponent_score  # You may wish to change this line.
+    if who == 0:
+        return score, opponent_score
+    if who == 1:
+        return opponent_score,score
 
 #######################
 # Phase 2: Strategies #
