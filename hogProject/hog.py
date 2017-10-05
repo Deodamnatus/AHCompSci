@@ -1,7 +1,7 @@
 """The Game of Hog."""
 
 
-
+from random import randint
 GOAL_SCORE = 100 # The goal of Hog is to score 100 points.
 
 ######################
@@ -24,7 +24,7 @@ def roll_dice(num_rolls, dice=6):
     assert type(dice) == int and dice >= 1, 'Illegal value for sides'
     total = 0
     for i in range(0,num_rolls):
-        roll = randint(1, sides)
+        roll = randint(1, dice)
         #check for rolling a 1
         if roll == 1:
             total = 1
@@ -47,9 +47,10 @@ def take_turn(num_rolls, opponent_score, dice=6):
     "*** YOUR CODE HERE ***"
 
     # check for free bacon
+
     if num_rolls == 0:
         # return largest digit in opponent_string
-        return max( int(i) for i in str(opponent_score))
+        return max( int(i) for i in str(opponent_score)) + 1
     else:
         return roll_dice(num_rolls, dice=dice)
 
@@ -67,6 +68,11 @@ def select_dice(score, opponent_score):
     True
     """
     "*** YOUR CODE HERE ***"
+    if (score+opponent_score)%7 == 0:
+        # hog wild
+        return 4
+    else:
+        return 6
 
 def other(who):
     """Return the other player, for a player WHO numbered 0 or 1.
@@ -92,6 +98,20 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
     who = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     score, opponent_score = 0, 0
     "*** YOUR CODE HERE ***"
+    while score < goal and opponent_score < goal:
+        if who == 0:
+            #use strategy 0
+            num_rolls = strategy0(score,opponent_score)
+        else:
+            #use strategy 1
+            num_rolls = strategy1(score,opponent_score)
+        #num_rolls has been defined
+
+        score += take_turn(num_rolls, opponent_score, select_dice(score, opponent_score))
+        who = other(who)
+        score,opponent_score = opponent_score,score
+
+
     return score, opponent_score  # You may wish to change this line.
 
 #######################
