@@ -163,11 +163,15 @@ def make_averaged(fn, num_samples=1000):
     Thus, the average value is 6.0.
     """
     "*** YOUR CODE HERE ***"
-    total = 0
-    for i in range(0,num_samples):
-        total += fn()   #what args to put here
 
-    return total/num_samples
+    def avgfn(*args):
+        total = 0
+        for i in range(0, num_samples):
+            total += fn(*args)
+        total = total/num_samples
+        return total
+    return avgfn
+
 
 
 def max_scoring_num_rolls(dice=6):
@@ -190,10 +194,8 @@ def max_scoring_num_rolls(dice=6):
     10
     """
     "*** YOUR CODE HERE ***"
-
-
     for i in range (1,11):
-        print(i, " dice scores ", make_averaged(roll_dice(num_rolls, dice)), "on average")
+        print(i, " dice scores ", make_averaged(roll_dice)(i, dice), "on average")
 
 def winner(strategy0, strategy1):
     """Return 0 if strategy0 wins against strategy1, and 1 otherwise."""
@@ -247,7 +249,7 @@ def bacon_strategy(score, opponent_score):
     """
     "*** YOUR CODE HERE ***"
     # Doesn't use score at all????
-    if max( int(i) for i in str(opponent_score)) + 1 >= BACON_MARGIN:
+    if max(int(i) for i in str(opponent_score)) + 1 >= BACON_MARGIN:
         return 0
     else:
         return BASELINE_NUM_ROLLS
