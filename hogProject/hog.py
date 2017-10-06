@@ -115,7 +115,7 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
        return score, opponent_score
    if who == 1:
        return opponent_score,score
-
+    #TODO: ADD SWINE SWAP
 #######################
 # Phase 2: Strategies #
 #######################
@@ -270,7 +270,7 @@ def swap_strategy(score, opponent_score):
    5
    """
    "*** YOUR CODE HERE ***"
-   return 5 # Replace this statement
+   #incorpirate swap_strategy
 
 def final_strategy(score, opponent_score):
    """Write a brief description of your final strategy.
