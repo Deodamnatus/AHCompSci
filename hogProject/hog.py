@@ -1,8 +1,7 @@
 """The Game of Hog."""
 
-import dice
 
-
+from random import randint
 GOAL_SCORE = 100 # The goal of Hog is to score 100 points.
 
 ######################
@@ -11,7 +10,7 @@ GOAL_SCORE = 100 # The goal of Hog is to score 100 points.
 
 # Taking turns
 
-def roll_dice(num_rolls, dice=six_sided):
+def roll_dice(num_rolls, dice=6):
     """Roll DICE for NUM_ROLLS times.  Return either the sum of the outcomes,
     or 1 if a 1 is rolled (Pig out). This calls DICE exactly NUM_ROLLS times.
 
@@ -23,10 +22,18 @@ def roll_dice(num_rolls, dice=six_sided):
     assert num_rolls > 0, 'Must roll at least once.'
     "*** YOUR CODE HERE ***"
     assert type(dice) == int and dice >= 1, 'Illegal value for sides'
-    return randint(1, sides)
+    total = 0
+    for i in range(0,num_rolls):
+        roll = randint(1, dice)
+        #check for rolling a 1
+        if roll == 1:
+            total = 1
+            break
+        total += roll
+    return total
 
 
-def take_turn(num_rolls, opponent_score, dice=six_sided):
+def take_turn(num_rolls, opponent_score, dice=6):
     """Simulate a turn rolling NUM_ROLLS dice, which may be 0 (Free bacon).
 
     num_rolls:       The number of dice rolls that will be made.
@@ -38,6 +45,14 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     assert opponent_score < 100, 'The game should be over.'
     "*** YOUR CODE HERE ***"
+
+    # check for free bacon
+
+    if num_rolls == 0:
+        # return largest digit in opponent_string
+        return max( int(i) for i in str(opponent_score)) + 1
+    else:
+        return roll_dice(num_rolls, dice=dice)
 
 # Playing a game
 
@@ -53,6 +68,11 @@ def select_dice(score, opponent_score):
     True
     """
     "*** YOUR CODE HERE ***"
+    if (score+opponent_score)%7 == 0:
+        # hog wild
+        return 4
+    else:
+        return 6
 
 def other(who):
     """Return the other player, for a player WHO numbered 0 or 1.
@@ -78,7 +98,23 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
     who = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     score, opponent_score = 0, 0
     "*** YOUR CODE HERE ***"
-    return score, opponent_score  # You may wish to change this line.
+    while score < goal and opponent_score < goal:
+        if who == 0:
+            #use strategy 0
+            num_rolls = strategy0(score,opponent_score)
+        else:
+            #use strategy 1
+            num_rolls = strategy1(score,opponent_score)
+        #num_rolls has been defined
+
+        score += take_turn(num_rolls, opponent_score, select_dice(score, opponent_score))
+        who = other(who)
+        score,opponent_score = opponent_score,score
+
+    if who == 0:
+        return score, opponent_score
+    if who == 1:
+        return opponent_score,score
 
 #######################
 # Phase 2: Strategies #
@@ -127,8 +163,14 @@ def make_averaged(fn, num_samples=1000):
     Thus, the average value is 6.0.
     """
     "*** YOUR CODE HERE ***"
+    total = 0
+    for i in range(0,num_samples):
+        total += fn()   #what args to put here
 
-def max_scoring_num_rolls(dice=six_sided):
+    return total/num_samples
+
+
+def max_scoring_num_rolls(dice=6):
     """Return the number of dice (1 to 10) that gives the highest average turn
     score by calling roll_dice with the provided DICE.  Print all averages as in
     the doctest below.  Assume that dice always returns positive outcomes.
@@ -149,8 +191,13 @@ def max_scoring_num_rolls(dice=six_sided):
     """
     "*** YOUR CODE HERE ***"
 
+
+    for i in range (1,11):
+        print(i, " dice scores ", make_averaged(roll_dice(num_rolls, dice)), "on average")
+
 def winner(strategy0, strategy1):
     """Return 0 if strategy0 wins against strategy1, and 1 otherwise."""
+    #could implement actual average by doing multiple runs for every run instead of only calling play once
     score0, score1 = play(strategy0, strategy1)
     if score0 > score1:
         return 0
@@ -166,9 +213,9 @@ def average_win_rate(strategy, baseline=always_roll(BASELINE_NUM_ROLLS)):
 def run_experiments():
     """Run a series of strategy experiments and report results."""
     if True: # Change to False when done finding max_scoring_num_rolls
-        six_sided_max = max_scoring_num_rolls(six_sided)
+        six_sided_max = max_scoring_num_rolls(6)
         print('Max scoring num rolls for six-sided dice:', six_sided_max)
-        four_sided_max = max_scoring_num_rolls(four_sided)
+        four_sided_max = max_scoring_num_rolls(4)
         print('Max scoring num rolls for four-sided dice:', four_sided_max)
 
     if False: # Change to True to test always_roll(8)
@@ -199,7 +246,11 @@ def bacon_strategy(score, opponent_score):
     0
     """
     "*** YOUR CODE HERE ***"
-    return 5 # Replace this statement
+    # Doesn't use score at all????
+    if max( int(i) for i in str(opponent_score)) + 1 >= BACON_MARGIN:
+        return 0
+    else:
+        return BASELINE_NUM_ROLLS
 
 def swap_strategy(score, opponent_score):
     """This strategy rolls 0 dice when it would result in a beneficial swap and
@@ -278,7 +329,7 @@ def play_interactive():
     score0, score1 = play(strategy0, strategy1)
     print('Final scores:', score0, 'to', score1)
 
-@main
+#@main
 def run(*args):
     """Read in the command-line argument and calls corresponding functions.
 
