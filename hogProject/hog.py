@@ -190,13 +190,10 @@ def max_scoring_num_rolls(dice=6):
     10
     """
     "*** YOUR CODE HERE ***"
-    #could implement actual averagine by doing multiple runs for every run instead of only calling roll_dice once
-    for i in range (1,11):
-        average_score=0
-        for x in range(0,1000):
-            average_score += roll_dice(i,dice)
 
-        print(i, " dice scores ", average_score/1000, "on average")
+
+    for i in range (1,11):
+        print(i, " dice scores ", make_averaged(roll_dice(num_rolls, dice)), "on average")
 
 def winner(strategy0, strategy1):
     """Return 0 if strategy0 wins against strategy1, and 1 otherwise."""
@@ -216,9 +213,9 @@ def average_win_rate(strategy, baseline=always_roll(BASELINE_NUM_ROLLS)):
 def run_experiments():
     """Run a series of strategy experiments and report results."""
     if True: # Change to False when done finding max_scoring_num_rolls
-        six_sided_max = max_scoring_num_rolls(six_sided)
+        six_sided_max = max_scoring_num_rolls(6)
         print('Max scoring num rolls for six-sided dice:', six_sided_max)
-        four_sided_max = max_scoring_num_rolls(four_sided)
+        four_sided_max = max_scoring_num_rolls(4)
         print('Max scoring num rolls for four-sided dice:', four_sided_max)
 
     if False: # Change to True to test always_roll(8)
