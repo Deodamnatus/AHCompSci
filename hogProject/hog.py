@@ -147,7 +147,7 @@ def always_roll(n):
 
 # Experiments
 
-def make_averaged(fn, num_samples=1000):
+def make_averaged(fn, num_samples=10000):
     """Return a function that returns the average_value of FN when called.
 
     To implement this function, you will have to use *args syntax, a new Python
@@ -197,8 +197,15 @@ def max_scoring_num_rolls(dice=6):
     10
     """
     "*** YOUR CODE HERE ***"
+    max_num_rolls=0
+    max_roll=0
     for i in range (1,11):
-     print(i, " dice scores ", make_averaged(roll_dice)(i, dice), "on average")
+        current_avg = make_averaged(roll_dice)(i, dice)
+        print(i, " dice scores ", current_avg, "on average")
+        if current_avg > max_roll:
+            max_num_rolls,max_roll = i,current_avg
+    return max_num_rolls
+
 
 def winner(strategy0, strategy1):
     """Return 0 if strategy0 wins against strategy1, and 1 otherwise."""
@@ -369,3 +376,4 @@ def run(*args):
     elif args.run_experiments:
      run_experiments()
 
+run_experiments()
