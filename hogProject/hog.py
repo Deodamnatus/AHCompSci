@@ -125,8 +125,10 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
 
 # Basic Strategy
 
-BASELINE_NUM_ROLLS = 5
-BACON_MARGIN = 8
+BASELINE_NUM_ROLLS = 6 # avg of 8.7
+BACON_MARGIN = 9
+BACON_MARGIN_FOUR_SIDE = 5
+BASELINE_NUM_ROLLS_FOUR_SIDE = 4 # avg of 4.48
 
 def always_roll(n):
     """Return a strategy that always rolls N dice.
@@ -293,6 +295,7 @@ def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
     *** YOUR DESCRIPTION HERE ***
+    Same as Swap Strategy but incorpirates the 4 sided dice rule
     """
     "*** YOUR CODE HERE ***"
     return 5 # Replace this statement
