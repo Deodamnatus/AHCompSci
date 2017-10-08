@@ -109,7 +109,7 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
 
      score += take_turn(num_rolls, opponent_score, select_dice(score, opponent_score))
      who = other(who)
-     if score/opponent_score != 2 and opponent_score/score !=2:
+     if score*2 != opponent_score and opponent_score*2 != score:
       score,opponent_score = opponent_score,score
 
     if who == 0:
