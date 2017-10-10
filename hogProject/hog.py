@@ -219,7 +219,7 @@ def winner(strategy0, strategy1):
     else:
      return 1
 
-def average_win_rate(strategy, baseline=always_roll(BASELINE_NUM_ROLLS)):
+def average_win_rate(strategy, baseline=always_roll(5)):
     """Return the average win rate (0 to 1) of STRATEGY against BASELINE."""
     win_rate_as_player_0 = 1 - make_averaged(winner)(strategy, baseline)
     win_rate_as_player_1 = make_averaged(winner)(baseline, strategy)
