@@ -382,4 +382,4 @@ def run(*args):
     elif args.run_experiments:
      run_experiments()
 
-average_win_rate(swap_strategy)
+print(average_win_rate(swap_strategy))
