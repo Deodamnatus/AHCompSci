@@ -126,9 +126,10 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
 # Basic Strategy
 
 BASELINE_NUM_ROLLS = 6 # avg of 8.7
+BASELINE_NUM_ROLLS_FOUR_SIDE = 4 # avg of 4.48
 BACON_MARGIN = 9
 BACON_MARGIN_FOUR_SIDE = 5
-BASELINE_NUM_ROLLS_FOUR_SIDE = 4 # avg of 4.48
+
 
 def always_roll(n):
     """Return a strategy that always rolls N dice.
@@ -149,7 +150,7 @@ def always_roll(n):
 
 # Experiments
 
-def make_averaged(fn, num_samples=1000000):
+def make_averaged(fn, num_samples=10000):
     """Return a function that returns the average_value of FN when called.
 
     To implement this function, you will have to use *args syntax, a new Python
@@ -296,6 +297,8 @@ def final_strategy(score, opponent_score):
 
     *** YOUR DESCRIPTION HERE ***
     Same as Swap Strategy but incorpirates the 4 sided dice rule
+    if you're one away from a good swap roll a lot
+
     """
     "*** YOUR CODE HERE ***"
     return 5 # Replace this statement
@@ -379,4 +382,4 @@ def run(*args):
     elif args.run_experiments:
      run_experiments()
 
-run_experiments()
+average_win_rate(swap_strategy)
