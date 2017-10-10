@@ -171,11 +171,11 @@ def make_averaged(fn, num_samples=10000):
     "*** YOUR CODE HERE ***"
 
     def avgfn(*args):
-     total = 0
-     for i in range(0, num_samples):
-      total += fn(*args)
-     total = total/num_samples
-     return total
+        total = 0
+        for i in range(0, num_samples):
+            total += fn(*args)
+        total = total/num_samples
+        return total
     return avgfn
 
 
@@ -219,7 +219,7 @@ def winner(strategy0, strategy1):
     else:
      return 1
 
-def average_win_rate(strategy, baseline=always_roll(5)):
+def average_win_rate(strategy, baseline=always_roll(6)):
     """Return the average win rate (0 to 1) of STRATEGY against BASELINE."""
     win_rate_as_player_0 = 1 - make_averaged(winner)(strategy, baseline)
     win_rate_as_player_1 = make_averaged(winner)(baseline, strategy)
@@ -298,10 +298,23 @@ def final_strategy(score, opponent_score):
     *** YOUR DESCRIPTION HERE ***
     Same as Swap Strategy but incorpirates the 4 sided dice rule
     if you're one away from a good swap roll a lot
-
+    Make dictionary wiht averages of very high number of rolls and for each entry check if its lower than the final needed
     """
     "*** YOUR CODE HERE ***"
-    return 5 # Replace this statement
+    #checks if bacon will win game
+    if max(int(i) for i in str(opponent_score)) + 1 +score >= 100:
+        return 0
+    #rolls high if its close to swap amount
+    elif (score + 1)*2 == opponent_score:
+        return 10
+    elif (score+opponent_score)%7 == 0:
+        for i in
+        if max(int(i) for i in str(opponent_score)) + 1 >= BACON_MARGIN_FOUR_SIDE:
+            return 0
+        else:
+            return BASELINE_NUM_ROLLS_FOUR_SIDE
+    else:
+        return swap_strategy(score,opponent_score)
 
 
 ##########################
@@ -381,5 +394,4 @@ def run(*args):
       exit(0)
     elif args.run_experiments:
      run_experiments()
-
-print(average_win_rate(swap_strategy))
+print(average_win_rate(always_roll(5)))
