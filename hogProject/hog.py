@@ -219,7 +219,7 @@ def winner(strategy0, strategy1):
     else:
      return 1
 
-def average_win_rate(strategy, baseline=always_roll(6)):
+def average_win_rate(strategy, baseline=always_roll(5)):
     """Return the average win rate (0 to 1) of STRATEGY against BASELINE."""
     win_rate_as_player_0 = 1 - make_averaged(winner)(strategy, baseline)
     win_rate_as_player_1 = make_averaged(winner)(baseline, strategy)
@@ -227,7 +227,7 @@ def average_win_rate(strategy, baseline=always_roll(6)):
 
 def run_experiments():
     """Run a series of strategy experiments and report results."""
-    if True: # Change to False when done finding max_scoring_num_rolls
+    if False: # Change to False when done finding max_scoring_num_rolls
      six_sided_max = max_scoring_num_rolls(6)
      print('Max scoring num rolls for six-sided dice:', six_sided_max)
      four_sided_max = max_scoring_num_rolls(4)
@@ -242,7 +242,7 @@ def run_experiments():
     if False: # Change to True to test swap_strategy
      print('swap_strategy win rate:', average_win_rate(swap_strategy))
 
-    if False: # Change to True to test final_strategy
+    if True: # Change to True to test final_strategy
      print('final_strategy win rate:', average_win_rate(final_strategy))
 
     "*** You may add additional experiments as you wish ***"
@@ -301,20 +301,44 @@ def final_strategy(score, opponent_score):
     Make dictionary wiht averages of very high number of rolls and for each entry check if its lower than the final needed
     """
     "*** YOUR CODE HERE ***"
-    #checks if bacon will win game
-    if max(int(i) for i in str(opponent_score)) + 1 +score >= 100:
-        return 0
+
+
+    #Makes it more or less risky based on if its behind or not. Try running winrate script and adding/removing this part or mess w numbers and run it
+    if score - opponent_score >= 20:
+        BASELINE_NUM_ROLLS = 5
+        BASELINE_NUM_ROLLS_FOUR_SIDE = 3
+        BACON_MARGIN = 7
+        BACON_MARGIN_FOUR_SIDE = 3
+    else:
+        BASELINE_NUM_ROLLS = 6  # avg of 8.7
+        BASELINE_NUM_ROLLS_FOUR_SIDE = 4  # avg of 4.48
+        BACON_MARGIN = 9
+        BACON_MARGIN_FOUR_SIDE = 5
+
     #rolls high if its close to swap amount
+
+    #  checks if bacon will win game
+    if max(int(i) for i in str(opponent_score)) + 1 + score >= 100:
+        return 0
+    #checks for bacon to beneficial swap
+    elif max(int(i) for i in str(opponent_score)) + 1 + opponent_score == score * 2:
+            # beneficial swap
+            return 0
+    #checks for one point away from beneficial swap
     elif (score + 1)*2 == opponent_score:
-        return 10
+        return 10 # try changing this for winrate edits
+    #if 4 dice strategy
     elif (score+opponent_score)%7 == 0:
-        for i in
         if max(int(i) for i in str(opponent_score)) + 1 >= BACON_MARGIN_FOUR_SIDE:
             return 0
         else:
             return BASELINE_NUM_ROLLS_FOUR_SIDE
+    #check for bacon margin
+    elif max(int(i) for i in str(opponent_score)) + 1 >= BACON_MARGIN:
+        return 0
+    #if no other strats just return baseline
     else:
-        return swap_strategy(score,opponent_score)
+        return BASELINE_NUM_ROLLS
 
 
 ##########################
@@ -394,4 +418,4 @@ def run(*args):
       exit(0)
     elif args.run_experiments:
      run_experiments()
-print(average_win_rate(always_roll(5)))
+print(average_win_rate(final_strategy))
