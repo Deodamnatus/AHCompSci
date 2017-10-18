@@ -129,7 +129,10 @@ BASELINE_NUM_ROLLS = 6 # avg of 8.7
 BASELINE_NUM_ROLLS_FOUR_SIDE = 4 # avg of 4.48
 BACON_MARGIN = 9
 BACON_MARGIN_FOUR_SIDE = 5
-
+global roll_a_shit_ton
+roll_a_shit_ton = BASELINE_NUM_ROLLS
+global diff_scores_change_strat
+diff_scores_change_strat = 0
 
 def always_roll(n):
     """Return a strategy that always rolls N dice.
@@ -150,7 +153,7 @@ def always_roll(n):
 
 # Experiments
 
-def make_averaged(fn, num_samples=10000):
+def make_averaged(fn, num_samples=10000000):
     """Return a function that returns the average_value of FN when called.
 
     To implement this function, you will have to use *args syntax, a new Python
@@ -243,7 +246,20 @@ def run_experiments():
      print('swap_strategy win rate:', average_win_rate(swap_strategy))
 
     if True: # Change to True to test final_strategy
-     print('final_strategy win rate:', average_win_rate(final_strategy))
+        max_winrate = 0
+        list_of_shit = []
+        for diff_scores in range (0,20):
+            for shit_ton in range (5,11):
+                diff_scores_change_strat = diff_scores
+                roll_a_shit_ton = shit_ton
+                current_winrate = average_win_rate(final_strategy)
+                if current_winrate > max_winrate:
+                    max_winrate = current_winrate
+                    list_of_shit = []
+                    list_of_shit.append(diff_scores)
+                    list_of_shit.append(shit_ton)
+                print(diff_scores_change_strat,' ', shit_ton, ' Final_strategy win rate:', current_winrate)
+        print("\nMAX: ", max_winrate, "\nDIFF: ", list_of_shit[0], "\nSHIT: ", list_of_shit[1])
 
     "*** You may add additional experiments as you wish ***"
 
@@ -304,7 +320,7 @@ def final_strategy(score, opponent_score):
 
 
     #Makes it more or less risky based on if its behind or not. Try running winrate script and adding/removing this part or mess w numbers and run it
-    if score - opponent_score >= 20:
+    if score - opponent_score >= 14: #replace with diff_scores_change_strat
         BASELINE_NUM_ROLLS = 5
         BASELINE_NUM_ROLLS_FOUR_SIDE = 3
         BACON_MARGIN = 7
@@ -326,7 +342,7 @@ def final_strategy(score, opponent_score):
             return 0
     #checks for one point away from beneficial swap
     elif (score + 1)*2 == opponent_score:
-        return 10 # try changing this for winrate edits
+        return 10 # try changing this to roll_a_shit_ton
     #if 4 dice strategy
     elif (score+opponent_score)%7 == 0:
         if max(int(i) for i in str(opponent_score)) + 1 >= BACON_MARGIN_FOUR_SIDE:
@@ -418,4 +434,5 @@ def run(*args):
       exit(0)
     elif args.run_experiments:
      run_experiments()
+#run_experiments()
 print(average_win_rate(final_strategy))
