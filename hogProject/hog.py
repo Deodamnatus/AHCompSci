@@ -153,7 +153,7 @@ def always_roll(n):
 
 # Experiments
 
-def make_averaged(fn, num_samples=10000000):
+def make_averaged(fn, num_samples=10000):
     """Return a function that returns the average_value of FN when called.
 
     To implement this function, you will have to use *args syntax, a new Python
